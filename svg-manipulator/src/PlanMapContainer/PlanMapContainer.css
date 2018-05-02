@@ -1,0 +1,30 @@
+.svg-wrapper {
+    position: relative;
+    height: 90vmin;
+    width: 90vmin;
+    border: 5px solid #44f;
+    background: black;
+    padding: 15px;
+    overflow: hidden;
+}
+.svg-wrapper > .zoom-controls {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+    width: 85px;
+    display: flex;
+    justify-content: space-between;
+}
+.svg-wrapper > .zoom-controls > div {
+    width: 20px;
+    padding: 10px;
+    border: 1px solid #ff0;
+    text-align: center;
+    color: #ff0;
+    font-weight: 600;
+    cursor: pointer;
+}
+.svg-wrapper > .zoom-controls > div:hover {
+    background-color: rgba(255,255,0,.1);
+}

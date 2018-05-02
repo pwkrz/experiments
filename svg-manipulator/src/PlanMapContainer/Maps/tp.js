@@ -1,0 +1,22 @@
+import React from 'react';
+import {mapPath, lots} from "./MapSVG/path-strings"
+import "./tp.css";
+
+function TrailerPark (props) {
+        let pathsArray = lots.paths.map( coords => (<path className="lot" d={coords} onClick={props.rectSelect} />)),
+            rectsArray = lots.rects.map( coords => (
+              <rect className="lot" x={coords.x} y={coords.y} width={coords.width} height={coords.height} onClick={props.rectSelect} />)
+            );
+
+        return (
+          <svg id="mapSvg" version="1.1" viewBox="0 0 1082.3 741.55" xmlns="http://www.w3.org/2000/svg">
+            <path className="plan" d={mapPath} strokeWidth="100" />
+            <g>
+              {pathsArray}
+              {rectsArray}
+            </g>
+          </svg>
+    )
+};
+
+export default TrailerPark;
