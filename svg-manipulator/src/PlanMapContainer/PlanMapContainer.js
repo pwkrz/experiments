@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import TrailerPark from './Maps/tp'
-import { getHypot, getDelta, getPinchCenter, getZeroCoords, getDimensions } from './Helpers/helpers'
+import { getHypot, getDelta, getZoomPanParams, getPinchCenter, getZeroCoords, getDimensions } from './Helpers/helpers'
 import "./PlanMapContainer.css"
 
 export default class PlanMapContainer extends Component {
@@ -68,12 +68,25 @@ export default class PlanMapContainer extends Component {
 
         e.preventDefault();
 
-        let delta = e.type === "touchmove" && e.touches[1]
-                  ? getDelta(this.pinchZero, e.touches[0].clientX, e.touches[1].clientX, e.touches[0].clientY, e.touches[1].clientY)
-                  : getDelta(e.deltaY),
-            newZoom = this.zoom.toFixed(2) - delta.toFixed(2) || this.zoom;
-            
-        this.eventStart = { x: e.clientX || this.pinchCenter.x, y: e.clientY || this.pinchCenter.y };
+        let delta, newZoom;
+
+        if (e.type === "touchmove" && e.touches[1]) {
+
+            let { normalizedDelta, hyp } = getZoomPanParams(this.pinchZero, e.touches[0].clientX, e.touches[1].clientX, e.touches[0].clientY, e.touches[1].clientY);
+
+            delta = normalizedDelta;
+
+            this.pinchZero = hyp;
+        
+            // this.eventStart = { x: this.pinchCenter.x, y: this.pinchCenter.y };
+
+        } else {
+            delta = getDelta(e.deltaY);
+
+            this.eventStart = { x: e.clientX, y: e.clientY };
+        }
+        
+        newZoom = this.zoom.toFixed(2) - delta.toFixed(2) || this.zoom;
 
         if (newZoom < 1 || newZoom > 6) {
            return; 
@@ -89,18 +102,20 @@ export default class PlanMapContainer extends Component {
         }
     }
     mousedownHandler = (e) => {
-        if(e.touches && e.touches.length >= 2) {
+        if ( e.touches && e.touches[1] ) {
             this.pinchZero = getHypot( e.touches[0].clientX, e.touches[1].clientX, e.touches[0].clientY, e.touches[1].clientY );
 
-            this.pinchCenter = getPinchCenter(e.touches[0].clientX, e.touches[1].clientX, e.touches[0].clientY, e.touches[1].clientY);
+            this.eventStart = getPinchCenter(e.touches[0].clientX, e.touches[1].clientX, e.touches[0].clientY, e.touches[1].clientY);
 
             this.refs.mapBox.addEventListener("touchmove", this.wheelHandler, false);
+            this.refs.mapBox.removeEventListener("touchmove", this.moveHandler, false);
         } else {
             this.eventStart.x = e.clientX || e.touches[0].clientX;
             this.eventStart.y = e.clientY || e.touches[0].clientY;
 
             this.refs.mapBox.addEventListener("mousemove", this.moveHandler, false);
             this.refs.mapBox.addEventListener("touchmove", this.moveHandler, false);
+            this.refs.mapBox.removeEventListener("touchmove", this.wheelHandler, false);
         }        
     }
     mouseupHandler = (e) => {

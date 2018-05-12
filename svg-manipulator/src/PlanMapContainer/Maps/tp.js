@@ -3,9 +3,9 @@ import {mapPath, lots} from "./MapSVG/path-strings"
 import "./tp.css";
 
 function TrailerPark (props) {
-        let pathsArray = lots.paths.map( coords => (<path className="lot" d={coords} onClick={props.rectSelect} />)),
-            rectsArray = lots.rects.map( coords => (
-              <rect className="lot" x={coords.x} y={coords.y} width={coords.width} height={coords.height} onClick={props.rectSelect} />)
+        let pathsArray = lots.paths.map( (coords, i) => (<path className="lot" key={`lot-path-${i}`} d={coords} onClick={props.rectSelect} />)),
+            rectsArray = lots.rects.map( (coords, i) => (
+              <rect className="lot" key={`lot-rect-${i}`} x={coords.x} y={coords.y} width={coords.width} height={coords.height} onClick={props.rectSelect} />)
             );
 
         return (

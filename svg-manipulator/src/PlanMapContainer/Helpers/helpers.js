@@ -1,23 +1,22 @@
-const getHypot = (x1, x2, y1, y2) => Math.hypot( (Math.max(x1, x2) - Math.min(x1, x2)), (Math.max(y1, y2) - Math.min(y1, y2)) ),
-    getDelta = (...args) => {
-        switch (args.length) {
-            case 1:
-                return args[0] / Math.abs( 4*args[0] );
-            case 5:
-                let [pinchZero, ...touchCoords] = [...args],
-                    hyp = getHypot( ...touchCoords ),
-                    delta = pinchZero - hyp;
-                
-                pinchZero = hyp;
+const getHypot = (x1, x2, y1, y2) => ( Math.hypot( (Math.max(x1, x2) - Math.min(x1, x2)), (Math.max(y1, y2) - Math.min(y1, y2)) ) );
 
-                return delta / Math.abs( 20*delta );
-            default:
-                return 0;
-        }
-    },
-    getPinchCenter = (x1, x2, y1, y2) => { return { x: (x1 + x2) / 2, y: (y1 + y2) / 2 } },
-    getZeroCoords = () => { return {x: 0, y: 0} },
-    getDimensions = (ref) => {
+const getDelta = (realDelta) => {
+    return realDelta / Math.abs( 4 * realDelta ); // delta needs to be reduced to < 0.5, otherwise the zoom/pan is too fast
+};
+
+const getZoomPanParams = (pinchZero, ...touchCoords) => {
+        let hyp = getHypot( ...touchCoords ),
+            realDelta = pinchZero - hyp,
+            normalizedDelta = realDelta / Math.abs( 50 * realDelta ); // as above
+
+            return { normalizedDelta, hyp };
+    };
+
+const getPinchCenter = (x1, x2, y1, y2) => { return { x: (x1 + x2) / 2, y: (y1 + y2) / 2 } };
+
+const getZeroCoords = () => { return {x: 0, y: 0} };
+
+const getDimensions = (ref) => {
         let refDimensions = ref.getBoundingClientRect(),
             refComputed = window.getComputedStyle(ref);
 
@@ -38,4 +37,4 @@ const getHypot = (x1, x2, y1, y2) => Math.hypot( (Math.max(x1, x2) - Math.min(x1
         return refDimensions;
     };
 
-export { getHypot, getDelta, getPinchCenter, getZeroCoords, getDimensions };
+export { getHypot, getDelta, getZoomPanParams, getPinchCenter, getZeroCoords, getDimensions };
