@@ -1,6 +1,6 @@
 import React from 'react';
 import {mapPath, lots} from "./MapSVG/path-strings"
-import "./tp.css";
+import "./TrailerPark.css";
 
 function TrailerPark (props) {
         let pathsArray = lots.paths.map( (coords, i) => (<path className="lot" key={`lot-path-${i}`} d={coords} onClick={props.rectSelect} />)),

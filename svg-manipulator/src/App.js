@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import PlanMapContainer from './PlanMapContainer/PlanMapContainer';
+import MapModule from './MapModule/MapModule';
 import './App.css';
 
 const Aux = (props) => props.children;
@@ -10,7 +10,7 @@ class App extends Component {
       return (
         <Aux>
           <main>
-            <PlanMapContainer />
+            <MapModule />
           </main>
           {/* <div id="output" /> */}
         </Aux>

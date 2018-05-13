@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import TrailerPark from './Maps/tp'
+import TrailerPark from './Maps/TrailerPark'
 import { getHypot, getDelta, getZoomPanParams, getPinchCenter, getZeroCoords, getDimensions } from './Helpers/helpers'
-import "./PlanMapContainer.css"
+import "./MapModule.css"
 
 export default class PlanMapContainer extends Component {
     mapBoxDimensions;
