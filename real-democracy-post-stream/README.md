@@ -1,4 +1,4 @@
-# An extreme free speach post stream
+# An extreme free speech post stream
 
 In progress.
 
