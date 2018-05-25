@@ -1,0 +1,16 @@
+:host, form {
+  width: 100%;
+}
+form {
+  margin-bottom: 2em;
+}
+form > * {
+  font-size: 1.75em;
+}
+input {
+  width: 74%;
+}
+button {
+  width: 25%;
+  cursor: pointer;
+}

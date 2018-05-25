@@ -1,0 +1,30 @@
+:host {
+    font-family: Arial;
+}
+.header {
+    text-align: center;
+    border-bottom: 1px solid #aaa;
+    margin-bottom: 2em;
+}
+.container {
+    width: 1140px;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+@media (max-width: 992px) {
+    .container {
+        width: 960px;
+    }
+}
+@media (max-width: 768px) {
+   .container {
+        width: 720px;
+    } 
+}
+@media (max-width: 576px) {
+    .container {
+        width: 540px;
+    }
+}
