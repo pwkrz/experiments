@@ -1,3 +1,6 @@
+a:visited {
+    color: initial;
+}
 :host {
     font-family: Arial;
 }

@@ -11,6 +11,17 @@
     font-size: 1.75em;
     margin-right: 1em;
 }
+.pagination > a:last-child {
+    margin-right: 0;
+}
+.pagination > a.prev-next {
+    text-decoration: none;
+}
+.pagination > a.active {
+    color: #111;
+    pointer-events: none;
+    text-decoration: none;
+}
 .pagination > a.disabled {
     color: #ccc;
     pointer-events: none;

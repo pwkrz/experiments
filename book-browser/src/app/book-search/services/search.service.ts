@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
+import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import 'rxjs/add/operator/map';
 
@@ -11,8 +12,9 @@ export class SearchService {
   books$: BehaviorSubject<any[]>;
   displayedPages$: BehaviorSubject<number[]>;
   currentPage$: BehaviorSubject<number>;
+  hasError: boolean;
 
-  constructor(private http: Http) {
+  constructor(private http: Http, private router: Router) {
     this.searchQuery$ = new BehaviorSubject(null);
     this.books$ = new BehaviorSubject([]);
     this.displayedPages$ = new BehaviorSubject([]);
@@ -33,19 +35,21 @@ export class SearchService {
   }
 
   getDisplayedPages(currentPage, totalPages) {
+    
+
     return Array(9)
               .fill(null)
               .map( (_, i) => {
 
                 switch(true) {
-
                   case currentPage <= 5:
                     return i + 1;
                   case currentPage >= totalPages - 5:
-                    return totalPages - 8 + i;
+                    return totalPages - 9 + i;
                   default:
-                    return currentPage + i 
+                    return currentPage - 4 + i 
                 }
+
               })
   }
 
@@ -58,10 +62,22 @@ export class SearchService {
   updateStreams(data, q, maxResults, pageVal) {
 
     let books = data.items,
-        totalPages = Math.ceil( data.totalItems / maxResults),
-        currentPage = this.verifyCurrentPage(pageVal, totalPages),
+        totalPages = Math.ceil( parseInt(data.totalItems) / parseInt(maxResults) ),
+        currentPage = this.verifyCurrentPage( parseInt(pageVal), totalPages ),
         displayedPages = this.getDisplayedPages(currentPage, totalPages);
 
+    // To do: better workaround for the totalItems issue: https://productforums.google.com/forum/#!topic/books-api/Y_uEJhohJCc
+    if(!data.items){
+      this.hasError = true;
+      console.log(new Error("Items array missing. See: https://productforums.google.com/forum/#!topic/books-api/Y_uEJhohJCc"));
+      this.handleQueryChange({q, maxResults, page: pageVal - 1});
+      return;
+    }
+
+    if(this.hasError) {
+      this.router.navigate([], {queryParams: {page: pageVal}, queryParamsHandling: 'merge'})
+      this.hasError = false;
+    }
 
     this.searchQuery$.next(q);
     this.books$.next(data.items);
@@ -71,14 +87,14 @@ export class SearchService {
 
   handleQueryChange(params) {
 
-    let {q, maxResults = 10, page: startIndex = 1} = params;
+    let {q, maxResults = 10, page = 1} = params;
 
     this.http.get(this.apiURL, { params: {
         q,
         maxResults,
-        startIndex
+        startIndex: page*maxResults
       } })
       .map( resp => resp.json() )
-      .subscribe( data => this.updateStreams(data,  q, maxResults, startIndex) )
+      .subscribe( data => this.updateStreams(data,  q, maxResults, page), error => {throw new Error(error.status)} )
   }
 }

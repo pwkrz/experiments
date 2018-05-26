@@ -4,17 +4,18 @@ import { Component, OnInit, Input, OnChanges } from '@angular/core';
   selector: 'pagination',
   template: `
     <nav class="pagination">
-      <a [class.disabled]="this.currentPage == 1"
+      <a [ngClass]='{disabled: this.currentPage == 1, "prev-next": true}'
          [routerLink]="[]"
          queryParamsHandling="merge"
          [queryParams]='{ page: this.currentPage - 1 }'>\<</a>
 
       <a *ngFor="let item of displayedPages" 
          [routerLink]="[]"
+         [class.active]='this.currentPage == item'
          queryParamsHandling="merge"
          [queryParams]='{ page: item }'>{{ item }}</a>
 
-      <a [class.disabled]="this.currentPage == this.totalPages"
+      <a [ngClass]='{disabled: this.currentPage == this.displayedPages.length - 1, "prev-next": true}'
          [routerLink]="[]"
          queryParamsHandling="merge"
          [queryParams]='{ page: this.currentPage + 1 }'>\></a>
@@ -34,10 +35,8 @@ export class PaginationComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    console.log(this.currentPage, this.displayedPages)
   }
 
   ngOnChanges(changes) {
-    console.log(changes)
   }
 }

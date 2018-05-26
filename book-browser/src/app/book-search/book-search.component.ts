@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 
@@ -24,7 +24,7 @@ import { SearchService } from './services/search.service';
     }
   `]
 })
-export class BookSearchComponent implements OnInit {
+export class BookSearchComponent implements OnInit, OnDestroy {
 
   searchQuery: string;
   books$: Observable<any[]>;
@@ -38,12 +38,24 @@ export class BookSearchComponent implements OnInit {
 
   ngOnInit() {
     
-    this.activeRoute.queryParams.subscribe( queryParams => this.searchService.handleQueryChange(queryParams) );
+    this.activeRoute.queryParams.subscribe( queryParams => {
+      if(queryParams.q) {
+        this.searchService.handleQueryChange(queryParams)    
+      } else {
+        this.searchQuery = '';
+      }
+    });
 
     this.books$ = this.searchService.getBookStream();
     this.displayedPages$ = this.searchService.getDisplayedPagesStream();
     this.currentPage$ = this.searchService.getCurrentPagesStream();
 
     this.searchService.getSearchQueryStream().subscribe( q => this.searchQuery = q )
+  }
+
+  ngOnDestroy() {
+    this.books$ = null;
+    this.displayedPages$ = null;
+    this.currentPage$ = null;
   }
 }

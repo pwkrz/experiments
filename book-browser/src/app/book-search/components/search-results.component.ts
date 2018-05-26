@@ -51,11 +51,10 @@ import { SearchService } from './../services/search.service';
 export class SearchResultsComponent implements OnInit {
 
   @Input()
-  books;
+  books: any[];
 
   constructor(private searchService: SearchService) { }
 
   ngOnInit() {
   }
-
 }
