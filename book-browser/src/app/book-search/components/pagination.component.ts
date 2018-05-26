@@ -1,27 +1,43 @@
-import { SearchService } from './../search.service';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 
 @Component({
   selector: 'pagination',
   template: `
-    <p>
-      pagination works!
-    </p>
+    <nav class="pagination">
+      <a [class.disabled]="this.currentPage == 1"
+         [routerLink]="[]"
+         queryParamsHandling="merge"
+         [queryParams]='{ page: this.currentPage - 1 }'>\<</a>
+
+      <a *ngFor="let item of displayedPages" 
+         [routerLink]="[]"
+         queryParamsHandling="merge"
+         [queryParams]='{ page: item }'>{{ item }}</a>
+
+      <a [class.disabled]="this.currentPage == this.totalPages"
+         [routerLink]="[]"
+         queryParamsHandling="merge"
+         [queryParams]='{ page: this.currentPage + 1 }'>\></a>
+    </nav>
   `,
   styleUrls: ['./pagination.component.css']
 })
-export class PaginationComponent implements OnInit {
+export class PaginationComponent implements OnInit, OnChanges {
 
   @Input()
-  totalItems;
+  currentPage: number;
 
-  constructor(private searchService: SearchService) { }
+  @Input()
+  displayedPages: number[];
 
-  ngOnInit() {
-    this.searchService.getTotalItemsStream()
-        .subscribe( totalItems => {
-          console.log("pagin", totalItems)
-        })
+  constructor() {
   }
 
+  ngOnInit() {
+    console.log(this.currentPage, this.displayedPages)
+  }
+
+  ngOnChanges(changes) {
+    console.log(changes)
+  }
 }

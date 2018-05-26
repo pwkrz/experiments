@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Subject } from 'rxjs';
+import { Observable } from 'rxjs';
 
-import { SearchService } from './search.service';
+import { SearchService } from './services/search.service';
 
 @Component({
   selector: 'book-search',
@@ -12,8 +12,9 @@ import { SearchService } from './search.service';
         <search-bar [query]='searchQuery'></search-bar>
       </nav>
       <section *ngIf="searchQuery" class="search-results">
-        <search-results></search-results>
-        <pagination></pagination>
+        <pagination [displayedPages]="displayedPages$ | async" [currentPage]="currentPage$ | async"></pagination>
+        <search-results [books]="books$ | async"></search-results>
+        <pagination [displayedPages]="displayedPages$ | async" [currentPage]="currentPage$ | async"></pagination>
       </section>
     </div>
   `,
@@ -26,26 +27,23 @@ import { SearchService } from './search.service';
 export class BookSearchComponent implements OnInit {
 
   searchQuery: string;
-  totalItems$: Subject<number>;
-  books$: Subject<object[]>;
+  books$: Observable<any[]>;
+  displayedPages$: Observable<number[]>;
+  currentPage$: Observable<number>;
 
   constructor(private activeRoute: ActivatedRoute,
               private searchService: SearchService) {
     
-    this.totalItems$ = new Subject();
-    this.books$ = new Subject();
-  }
-
-  handleQuery(queryParams) {
-
-    this.searchQuery = queryParams.q;
-
-    this.searchService.getBooks(queryParams);
   }
 
   ngOnInit() {
     
-    this.activeRoute.queryParams.subscribe( queryParams => this.handleQuery(queryParams) );
-  }
+    this.activeRoute.queryParams.subscribe( queryParams => this.searchService.handleQueryChange(queryParams) );
 
+    this.books$ = this.searchService.getBookStream();
+    this.displayedPages$ = this.searchService.getDisplayedPagesStream();
+    this.currentPage$ = this.searchService.getCurrentPagesStream();
+
+    this.searchService.getSearchQueryStream().subscribe( q => this.searchQuery = q )
+  }
 }

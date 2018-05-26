@@ -16,12 +16,10 @@ export class SearchBarComponent implements OnInit {
   @Input()
   query;
 
-  maxResults = 10;
-
   constructor(private router: Router) { }
 
   search(query) {
-    this.router.navigate([], {queryParams: {q: query, maxResults: this.maxResults}})
+    this.router.navigate([], {queryParams: {q: query}, queryParamsHandling: 'merge'})
   }
 
   ngOnInit() {

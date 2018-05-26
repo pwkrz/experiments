@@ -1,4 +1,17 @@
 :host {
-    position: fixed;
-    bottom: 0;
+    width: 100%;
+}
+.pagination {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 1em;
+}
+.pagination > a {
+    font-size: 1.75em;
+    margin-right: 1em;
+}
+.pagination > a.disabled {
+    color: #ccc;
+    pointer-events: none;
 }

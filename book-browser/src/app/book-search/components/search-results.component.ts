@@ -1,20 +1,20 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { SearchService } from './../search.service';
+import { SearchService } from './../services/search.service';
 
 @Component({
   selector: 'search-results',
   template: `
-    <article *ngFor='let book of books | async' class="book-card">
+    <article *ngFor='let book of books' class="book-card">
       <div class="thumbnail">
         <img *ngIf="book.volumeInfo.imageLinks" [src]='book.volumeInfo.imageLinks.thumbnail'
-            [alt]='book.volumeInfo.authors.join(", ") + ": " + book.volumeInfo.title'>
+            [alt]='book.volumeInfo.title'>
         <img *ngIf="!book.volumeInfo.imageLinks" [src]='"http://via.placeholder.com/128x192"'
-            [alt]='book.volumeInfo.authors.join(", ") + ": " + book.volumeInfo.title'>
+            [alt]='book.volumeInfo.title'>
       </div>
       <div class="book-info">
         <div>
           <h3 class="book-title">{{ book.volumeInfo.title }}</h3>
-          <p class="book-author">- {{ book.volumeInfo.authors.join(", ") }}</p>
+          <p *ngIf="book.volumeInfo.authors" class="book-author">- {{ book.volumeInfo.authors.join(", ") }}</p>
           <p *ngIf="book.volumeInfo.description" class="book-desc">
             Summary: {{ book.volumeInfo.description.length > 300 ? book.volumeInfo.description.substr(0, 300) + "..."
                                                                 : book.volumeInfo.description }}
@@ -50,13 +50,12 @@ import { SearchService } from './../search.service';
 })
 export class SearchResultsComponent implements OnInit {
 
+  @Input()
   books;
 
   constructor(private searchService: SearchService) { }
 
   ngOnInit() {
-    this.books = this.searchService.getBookStream();
-    this.books.subscribe( books => console.log(books) )
   }
 
 }
