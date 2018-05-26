@@ -11,7 +11,8 @@ import { Component, OnInit, Input, OnChanges } from '@angular/core';
 
       <a *ngFor="let item of displayedPages" 
          [routerLink]="[]"
-         [class.active]='this.currentPage == item'
+         routerLinkActive='active'
+         [class.pressed]='this.currentPage == item'
          queryParamsHandling="merge"
          [queryParams]='{ page: item }'>{{ item }}</a>
 

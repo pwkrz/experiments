@@ -3,9 +3,7 @@ import { NgModule } from '@angular/core';
 import { BookSearchModule } from './book-search/book-search.module';
 import { routerModule } from './app.routing';
 
-
 import { AppComponent } from './app.component';
-
 
 @NgModule({
   declarations: [
