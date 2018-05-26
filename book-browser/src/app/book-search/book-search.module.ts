@@ -5,10 +5,11 @@ import { HttpModule } from '@angular/http';
 import { routerModule } from './book-search.routing';
 
 import { BookSearchComponent } from './book-search.component';
-import { SearchBarComponent } from './search-bar.component';
-import { SearchResultsComponent } from './search-results.component';
+import { SearchBarComponent } from './components/search-bar.component';
+import { SearchResultsComponent } from './components/search-results.component';
 
 import { SearchService } from './search.service';
+import { PaginationComponent } from './components/pagination.component';
 
 @NgModule({
   imports: [
@@ -23,7 +24,8 @@ import { SearchService } from './search.service';
   declarations: [
     BookSearchComponent,
     SearchBarComponent,
-    SearchResultsComponent
+    SearchResultsComponent,
+    PaginationComponent
   ],
   providers: [
     SearchService

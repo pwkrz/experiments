@@ -4,12 +4,11 @@
 .header {
     text-align: center;
     border-bottom: 1px solid #aaa;
-    margin-bottom: 2em;
 }
 .container {
     width: 1140px;
-    padding-right: 15px;
-    padding-left: 15px;
+    height: calc(100vh - 81px - 4em);
+    padding: 2em 1em;
     margin-right: auto;
     margin-left: auto;
 }

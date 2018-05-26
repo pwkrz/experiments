@@ -7,10 +7,14 @@ import 'rxjs/add/operator/map';
 export class SearchService {
 
   apiURL = "https://www.googleapis.com/books/v1/volumes";
-  bookStream$ = new Subject();
-  totalItemsStream$ = new Subject();
+  bookStream$: Subject<any[]>;
+  totalItemsStream$: Subject<number>;
 
-  constructor(private http: Http) { }
+  constructor(private http: Http) {
+
+    this.bookStream$ = new Subject();
+    this.totalItemsStream$ = new Subject();
+  }
 
   getTotalItemsStream() {
     return this.totalItemsStream$.asObservable().startWith(0);
@@ -20,18 +24,13 @@ export class SearchService {
     return this.bookStream$.asObservable().startWith([]);
   }
 
-  getBooks(query = "Cervantes", startIndex = 0, maxResults = 10) {
-    console.log(query)
-    this.http.get(this.apiURL, {
-      params: {
-        q: query,
-        startIndex,
-        maxResults
-      }
-    }).map( resp => resp.json() )
+  getBooks(queryParams) {
+
+    return this.http.get(this.apiURL, { params: { ...queryParams } })
+      .map( resp => resp.json() )
       .subscribe( data => {
-        this.totalItemsStream$.next(data.totalItems);
         this.bookStream$.next(data.items);
-      })
+        this.totalItemsStream$.next(data.totalItems);
+      });
   }
 }

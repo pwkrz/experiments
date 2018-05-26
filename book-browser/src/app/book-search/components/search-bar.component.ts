@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-
-import { SearchService } from './search.service';
+import { Component, OnInit, Input } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'search-bar',
@@ -14,10 +13,15 @@ import { SearchService } from './search.service';
 })
 export class SearchBarComponent implements OnInit {
 
-  constructor(private searchService: SearchService) { }
+  @Input()
+  query;
+
+  maxResults = 10;
+
+  constructor(private router: Router) { }
 
   search(query) {
-    this.searchService.getBooks(query)
+    this.router.navigate([], {queryParams: {q: query, maxResults: this.maxResults}})
   }
 
   ngOnInit() {
