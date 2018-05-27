@@ -22,7 +22,7 @@
 .book-desc {
   color: #888;
 }
-@media (max-width: 992px) {
+@media (max-width: 768px) {
   :host {
     font-size: 12px;
   }
