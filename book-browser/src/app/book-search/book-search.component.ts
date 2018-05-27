@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 
@@ -45,6 +45,11 @@ export class BookSearchComponent implements OnInit, OnDestroy {
   constructor(private activeRoute: ActivatedRoute,
               private searchService: SearchService) {
     
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onMouseOver(event) { 
+    this.searchService.updatePaginationSet()
   }
 
   ngOnInit() {

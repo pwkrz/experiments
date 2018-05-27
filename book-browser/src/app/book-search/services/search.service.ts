@@ -13,6 +13,9 @@ export class SearchService {
   paginationSet$: BehaviorSubject<number[]>;
   currentPage$: BehaviorSubject<number>;
   hasError: boolean;
+  totalPages: number;
+  currentPage: number;
+  paginationSet: number[];
 
   constructor(private http: Http, private router: Router) {
     this.searchQuery$ = new BehaviorSubject(null);
@@ -34,27 +37,29 @@ export class SearchService {
     return this.currentPage$.asObservable();
   }
 
-  getPaginationSet(currentPage, totalPages) {
+  updatePaginationSet() {
     
     let oddDigit = Math.floor(window.innerWidth / 200) * 2 - 1,
         psc = Math.max( 3, Math.min( 9, oddDigit ) ),
         halfUp = Math.ceil( psc / 2 ),
         halfDown = Math.floor( psc / 2 );
 
-    return Array(psc)
+    this.paginationSet = Array(psc)
               .fill(null)
               .map( (_, i) => {
 
                 switch(true) {
-                  case currentPage <= halfUp:
+                  case this.currentPage <= halfUp:
                     return i + 1;
-                  case currentPage >= totalPages - halfUp:
-                    return totalPages - psc + i;
+                  case this.currentPage >= this.totalPages - halfUp:
+                    return this.totalPages - psc + i;
                   default:
-                    return currentPage - halfDown + i 
+                    return this.currentPage - halfDown + i 
                 }
 
               })
+
+    this.paginationSet$.next(this.paginationSet);
   }
 
   verifyCurrentPage(pageVal, total) {
@@ -65,10 +70,11 @@ export class SearchService {
 
   updateStreams(data, q, maxResults, pageVal) {
 
-    let books = data.items,
-        totalPages = Math.ceil( parseInt(data.totalItems) / parseInt(maxResults) ),
-        currentPage = this.verifyCurrentPage( parseInt(pageVal), totalPages ),
-        paginationSet = this.getPaginationSet(currentPage, totalPages);
+    let books = data.items;
+
+    this.totalPages = Math.ceil( parseInt(data.totalItems) / parseInt(maxResults) ),
+    this.currentPage = this.verifyCurrentPage( parseInt(pageVal), this.totalPages ),
+    this.updatePaginationSet();
 
     // To do: better workaround for the totalItems issue: https://productforums.google.com/forum/#!topic/books-api/Y_uEJhohJCc
     if(!data.items){
@@ -85,8 +91,7 @@ export class SearchService {
 
     this.searchQuery$.next(q);
     this.books$.next(data.items);
-    this.paginationSet$.next(paginationSet);
-    this.currentPage$.next(currentPage);
+    this.currentPage$.next(this.currentPage);
   }
 
   handleQueryChange(params) {
