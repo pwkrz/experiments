@@ -1,15 +1,14 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { SearchService } from './../services/search.service';
 
 @Component({
   selector: 'search-results',
   template: `
-    <article *ngFor='let book of books' class="book-card">
+    <article #bookCard *ngFor='let book of books' class="book-card">
       <div class="thumbnail">
-        <img *ngIf="book.volumeInfo.imageLinks" [src]='book.volumeInfo.imageLinks.thumbnail'
-            [alt]='book.volumeInfo.title'>
-        <img *ngIf="!book.volumeInfo.imageLinks" [src]='"http://via.placeholder.com/128x192"'
-            [alt]='book.volumeInfo.title'>
+        <img [src]='book.volumeInfo.imageLinks ? book.volumeInfo.imageLinks.thumbnail : "http://via.placeholder.com/128x192"'
+             [alt]='book.volumeInfo.title'
+             (load)='onLoadStyles(bookCard)'>
       </div>
       <div class="book-info">
         <div>
@@ -17,7 +16,7 @@ import { SearchService } from './../services/search.service';
           <p *ngIf="book.volumeInfo.authors" class="book-author">- {{ book.volumeInfo.authors.join(", ") }}</p>
           <p *ngIf="book.volumeInfo.description" class="book-desc">
             Summary: {{ book.volumeInfo.description.length > 300 ? book.volumeInfo.description.substr(0, 300) + "..."
-                                                                : book.volumeInfo.description }}
+                                                                 : book.volumeInfo.description }}
           </p>
         </div>
         <a [href]="book.volumeInfo.infoLink" target="_blank">More info...</a>
@@ -25,12 +24,18 @@ import { SearchService } from './../services/search.service';
     </article>
   `,
   styles: [`
+    :host {
+      display: flex;
+      flex-direction: column;
+    }
     .book-card {
       display: flex;
       border: 1px solid #aaa;
       margin-bottom: 1em;
       padding: 1em;
       box-shadow: 0 2px 6px #666;
+      opacity: 0;
+      transition: opacity .1s linear;
     }
     .thumbnail {
       margin-right: 2em;
@@ -48,13 +53,24 @@ import { SearchService } from './../services/search.service';
     }
   `]
 })
-export class SearchResultsComponent implements OnInit {
+export class SearchResultsComponent implements OnInit, OnChanges {
+
+  loadCounter: number = 1;
 
   @Input()
   books: any[];
 
   constructor(private searchService: SearchService) { }
 
+  onLoadStyles(bookCard) {
+    bookCard.style.opacity = 1;
+    bookCard.style.order = this.loadCounter++;
+  }
+
   ngOnInit() {
+  }
+
+  ngOnChanges() {
+    this.loadCounter = 1;
   }
 }

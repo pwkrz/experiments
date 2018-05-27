@@ -19,7 +19,8 @@ form > small {
   display: none;
 }
 form.submitted.ng-invalid > input {
-  border-color: rgb(194, 81, 81);
+  border-color: rgb(216, 108, 108);
+  border-style: solid;
 }
 form.submitted.ng-invalid > small {
   position: absolute;
