@@ -9,14 +9,14 @@ import { Component, OnInit, Input, OnChanges } from '@angular/core';
          queryParamsHandling="merge"
          [queryParams]='{ page: this.currentPage - 1 }'>\<</a>
 
-      <a *ngFor="let item of displayedPages" 
+      <a *ngFor="let item of paginationSet" 
          [routerLink]="[]"
          routerLinkActive='active'
          [class.pressed]='this.currentPage == item'
          queryParamsHandling="merge"
          [queryParams]='{ page: item }'>{{ item }}</a>
 
-      <a [ngClass]='{disabled: this.currentPage == this.displayedPages[this.displayedPages.length - 1], "prev-next": true}'
+      <a [ngClass]='{disabled: this.currentPage == this.paginationSet[this.paginationSet.length - 1], "prev-next": true}'
          [routerLink]="[]"
          queryParamsHandling="merge"
          [queryParams]='{ page: this.currentPage + 1 }'>\></a>
@@ -30,7 +30,7 @@ export class PaginationComponent implements OnInit, OnChanges {
   currentPage: number;
 
   @Input()
-  displayedPages: number[];
+  paginationSet: number[];
 
   constructor() {
   }

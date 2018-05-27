@@ -10,14 +10,14 @@ export class SearchService {
   apiURL = "https://www.googleapis.com/books/v1/volumes";
   searchQuery$: BehaviorSubject<string>;
   books$: BehaviorSubject<any[]>;
-  displayedPages$: BehaviorSubject<number[]>;
+  paginationSet$: BehaviorSubject<number[]>;
   currentPage$: BehaviorSubject<number>;
   hasError: boolean;
 
   constructor(private http: Http, private router: Router) {
     this.searchQuery$ = new BehaviorSubject(null);
     this.books$ = new BehaviorSubject([]);
-    this.displayedPages$ = new BehaviorSubject([]);
+    this.paginationSet$ = new BehaviorSubject([]);
     this.currentPage$ = new BehaviorSubject(null);
   }
 
@@ -27,15 +27,16 @@ export class SearchService {
   getBookStream() {
     return this.books$.asObservable();
   }
-  getDisplayedPagesStream() {
-    return this.displayedPages$.asObservable();
+  getPaginationSetStream() {
+    return this.paginationSet$.asObservable();
   }
   getCurrentPagesStream() {
     return this.currentPage$.asObservable();
   }
 
-  getDisplayedPages(currentPage, totalPages) {
+  getPaginationSet(currentPage, totalPages) {
     
+    console.log("window.innerWidth", window.innerWidth)
 
     return Array(9)
               .fill(null)
@@ -64,7 +65,7 @@ export class SearchService {
     let books = data.items,
         totalPages = Math.ceil( parseInt(data.totalItems) / parseInt(maxResults) ),
         currentPage = this.verifyCurrentPage( parseInt(pageVal), totalPages ),
-        displayedPages = this.getDisplayedPages(currentPage, totalPages);
+        paginationSet = this.getPaginationSet(currentPage, totalPages);
 
     // To do: better workaround for the totalItems issue: https://productforums.google.com/forum/#!topic/books-api/Y_uEJhohJCc
     if(!data.items){
@@ -81,7 +82,7 @@ export class SearchService {
 
     this.searchQuery$.next(q);
     this.books$.next(data.items);
-    this.displayedPages$.next(displayedPages);
+    this.paginationSet$.next(paginationSet);
     this.currentPage$.next(currentPage);
   }
 

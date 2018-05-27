@@ -12,9 +12,9 @@ import { SearchService } from './services/search.service';
         <search-bar [query]='searchQuery'></search-bar>
       </nav>
       <section *ngIf="searchQuery" class="search-results">
-        <pagination [displayedPages]="displayedPages$ | async" [currentPage]="currentPage$ | async"></pagination>
+        <pagination [paginationSet]="paginationSet$ | async" [currentPage]="currentPage$ | async"></pagination>
         <search-results [books]="books$ | async"></search-results>
-        <pagination [displayedPages]="displayedPages$ | async" [currentPage]="currentPage$ | async"></pagination>
+        <pagination [paginationSet]="paginationSet$ | async" [currentPage]="currentPage$ | async"></pagination>
       </section>
     </div>
   `,
@@ -36,7 +36,7 @@ export class BookSearchComponent implements OnInit, OnDestroy {
 
   searchQuery: string;
   books$: Observable<any[]>;
-  displayedPages$: Observable<number[]>;
+  paginationSet$: Observable<number[]>;
   currentPage$: Observable<number>;
 
   constructor(private activeRoute: ActivatedRoute,
@@ -55,7 +55,7 @@ export class BookSearchComponent implements OnInit, OnDestroy {
     });
 
     this.books$ = this.searchService.getBookStream();
-    this.displayedPages$ = this.searchService.getDisplayedPagesStream();
+    this.paginationSet$ = this.searchService.getPaginationSetStream();
     this.currentPage$ = this.searchService.getCurrentPagesStream();
 
     this.searchService.getSearchQueryStream().subscribe( q => this.searchQuery = q )
@@ -63,7 +63,7 @@ export class BookSearchComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.books$ = null;
-    this.displayedPages$ = null;
+    this.paginationSet$ = null;
     this.currentPage$ = null;
   }
 }
