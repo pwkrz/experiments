@@ -63,8 +63,8 @@ export class SearchResultsComponent implements OnInit, OnChanges {
   constructor(private searchService: SearchService) { }
 
   onLoadStyles(bookCard) {
-    bookCard.style.opacity = 1;
     bookCard.style.order = this.loadCounter++;
+    bookCard.style.opacity = 1;
   }
 
   ngOnInit() {

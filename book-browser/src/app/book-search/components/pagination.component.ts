@@ -16,7 +16,7 @@ import { Component, OnInit, Input, OnChanges } from '@angular/core';
          queryParamsHandling="merge"
          [queryParams]='{ page: item }'>{{ item }}</a>
 
-      <a [ngClass]='{disabled: this.currentPage == this.displayedPages.length - 1, "prev-next": true}'
+      <a [ngClass]='{disabled: this.currentPage == this.displayedPages[this.displayedPages.length - 1], "prev-next": true}'
          [routerLink]="[]"
          queryParamsHandling="merge"
          [queryParams]='{ page: this.currentPage + 1 }'>\></a>
