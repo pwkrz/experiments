@@ -26,11 +26,16 @@
   :host {
     font-size: 12px;
   }
+  .book-title, .book-desc {
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
 }
 @media (max-width: 576px) {
   .thumbnail {
     float: right;
     margin-left: 2em;
+    margin-right: 0;
     margin-bottom: 1.1em;
   }
 }

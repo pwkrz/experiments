@@ -27,6 +27,9 @@ import { SearchService } from './services/search.service';
       padding-left: 10px;
       padding-right: 10px;
     }
+    .search-bar {
+      padding-top: 2em;
+    }
     .search-bar.start {
       padding-top: 30vh;
     }
