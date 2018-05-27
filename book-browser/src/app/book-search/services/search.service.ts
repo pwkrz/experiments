@@ -36,19 +36,22 @@ export class SearchService {
 
   getPaginationSet(currentPage, totalPages) {
     
-    console.log("window.innerWidth", window.innerWidth)
+    let oddDigit = Math.floor(window.innerWidth / 200) * 2 - 1,
+        psc = Math.max( 3, Math.min( 9, oddDigit ) ),
+        halfUp = Math.ceil( psc / 2 ),
+        halfDown = Math.floor( psc / 2 );
 
-    return Array(9)
+    return Array(psc)
               .fill(null)
               .map( (_, i) => {
 
                 switch(true) {
-                  case currentPage <= 5:
+                  case currentPage <= halfUp:
                     return i + 1;
-                  case currentPage >= totalPages - 5:
-                    return totalPages - 9 + i;
+                  case currentPage >= totalPages - halfUp:
+                    return totalPages - psc + i;
                   default:
-                    return currentPage - 4 + i 
+                    return currentPage - halfDown + i 
                 }
 
               })
