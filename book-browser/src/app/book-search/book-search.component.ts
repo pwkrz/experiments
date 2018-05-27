@@ -19,6 +19,14 @@ import { SearchService } from './services/search.service';
     </div>
   `,
   styles: [`
+    :host {
+      width: 100%;
+    }
+    .book-search {
+      width: calc(100% - 20px);
+      padding-left: 10px;
+      padding-right: 10px;
+    }
     .search-bar.start {
       padding-top: 30vh;
     }

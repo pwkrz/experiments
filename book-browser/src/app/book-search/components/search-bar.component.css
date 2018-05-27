@@ -30,3 +30,13 @@ form.submitted.ng-invalid > small {
   font-size: .9em;
   color: rgb(194, 81, 81);
 }
+@media (max-width: 768px) {
+  form > input {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  form > button {
+    width: 100%;
+    cursor: pointer;
+  }
+}
