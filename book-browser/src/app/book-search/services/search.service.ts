@@ -1,3 +1,5 @@
+// TO DO: fix pagination bug: http://localhost:4200/search?q=vonnegut&page=7&maxResults=39
+
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { Router } from '@angular/router';
@@ -40,11 +42,12 @@ export class SearchService {
   updatePaginationSet() {
     
     let oddDigit = Math.floor(window.innerWidth / 200) * 2 - 1,
-        psc = Math.max( 3, Math.min( 9, oddDigit ) ),
-        halfUp = Math.ceil( psc / 2 ),
-        halfDown = Math.floor( psc / 2 );
+        max = Math.min( this.totalPages, 9 ),
+        psCount = Math.max( 3, Math.min( max, oddDigit ) ),
+        halfUp = Math.ceil( psCount / 2 ),
+        halfDown = Math.floor( psCount / 2 );
 
-    this.paginationSet = Array(psc)
+    this.paginationSet = Array(psCount)
               .fill(null)
               .map( (_, i) => {
 
@@ -52,7 +55,7 @@ export class SearchService {
                   case this.currentPage <= halfUp:
                     return i + 1;
                   case this.currentPage >= this.totalPages - halfUp:
-                    return this.totalPages - psc + i;
+                    return this.totalPages - psCount + i;
                   default:
                     return this.currentPage - halfDown + i 
                 }
