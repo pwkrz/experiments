@@ -1,0 +1,7 @@
+.offset-bottom-sm {
+    position: relative;
+    bottom: 2px;
+}
+.filter-label, input[type=checkbox] {
+    cursor: pointer;
+}

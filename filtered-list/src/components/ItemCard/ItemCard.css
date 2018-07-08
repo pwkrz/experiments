@@ -1,0 +1,11 @@
+.chevron {
+    display: inline-block;
+    -webkit-transform:scale(1.2, 2); /* Safari and Chrome */
+    -moz-transform:scale(1.2, 2); /* Firefox */
+    -ms-transform:scale(1.2, 2); /* IE 9 */
+    -o-transform:scale(1.2, 2); /* Opera */
+    transform:scale(1.2, 2); /* W3C */
+}
+.card-img-top {
+    min-height: 200px;
+}
