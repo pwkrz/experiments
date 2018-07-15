@@ -1,0 +1,36 @@
+<h1 class="h2 my-5">List of employees</h1>
+<div class="table-responsive mb-5">
+  <table class="table">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Email</th>
+        <th scope="col">DOB</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngIf="employees.length; else noEmployees">
+        <ng-container *ngFor="let emp of employees; let i = index">
+          <tr>
+            <th scope="row">{{i+1}}</th>
+            <td>{{emp.name}}</td>
+            <td>{{emp.email}}</td>
+            <td>{{emp.dob}}</td>
+            <td>
+              <button type="button" class="btn btn-outline-danger mr-2" (click)="onDelete(emp.id)">delete</button>
+              <button [routerLink]="['edit']" [queryParams]="{ id: emp.id }" type="button" class="btn btn-info">edit</button>
+            </td>
+          </tr>
+        </ng-container>
+      </ng-container>
+      <ng-template #noEmployees>
+        <tr>
+          <td colspan="5">Nothing to show yet</td>
+        </tr>
+      </ng-template>
+    </tbody>
+  </table>
+</div>
+<button [routerLink]="['new']" type="button" class="btn btn-primary btn-lg float-right">Add new employee</button>

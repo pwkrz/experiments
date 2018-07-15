@@ -1,0 +1,33 @@
+<h1 class="h2 mt-3 mb-5">{{title}}</h1>
+<form *ngIf="currentEmployee; else notFound" [formGroup]="employeeForm" novalidate="true" (ngSubmit)="onFormSubmit()">
+  <div class="form-group">
+    <label for="inputName">Name</label>
+    <input type="text" id="inputName" placeholder="Name" formControlName="name"
+           [ngClass]='{"is-invalid": nameRef.errors && isSubmitted, "form-control": true}'>
+    <div *ngIf='nameRef.errors && isSubmitted' class='invalid-feedback'>
+      <small *ngIf='nameRef.errors?.required'>Please provide a name</small>
+      <small *ngIf='nameRef.errors?.minlength'>The name must be at least {{nameRef.errors.minlength.requiredLength}} characters long</small>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="inputEmail">Email address</label>
+    <input type="email" id="inputEmail" placeholder="Email" formControlName="email"
+           [ngClass]='{"is-invalid": emailRef.errors && isSubmitted, "form-control": true}'>
+    <div *ngIf='emailRef.errors && isSubmitted' class='invalid-feedback'>
+      <small *ngIf='emailRef.errors?.required'>Please provide an email</small>
+      <small *ngIf='emailRef.errors?.pattern'>Invalid email</small>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="inputDOB">Date of birth</label>
+    <input type="date" id="inputDOB" placeholder="Date of birth" formControlName="dob"
+           [ngClass]='{"is-invalid": dobRef.errors && isSubmitted, "form-control": true}'>
+    <div *ngIf='dobRef.errors && isSubmitted' class='invalid-feedback'>
+      <small *ngIf='dobRef.errors?.required'>Please provide a date of birth</small>
+    </div>
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+<ng-template #notFound>
+  <p class="text-muted">Employee not found</p>
+</ng-template>

@@ -1,0 +1,9 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<main class="container">
+  <ng-container *ngIf="isSupported; else notSupported">
+    <router-outlet></router-outlet>
+  </ng-container>
+  <ng-template #notSupported>
+    <p class="text-muted my-5">This app is not compatible with your browser. Please try using the latest version of FireFox or Chrome.</p>
+  </ng-template>
+</main>

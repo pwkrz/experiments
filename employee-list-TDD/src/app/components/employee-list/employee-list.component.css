@@ -1,0 +1,12 @@
+thead > tr > th:first-child {
+    width: 5%;
+}
+thead > tr > th:nth-child(4) {
+    width: 15%;
+}
+thead > tr > th:last-child {
+    width: 15%;
+}
+.table td {
+    white-space: nowrap;
+}
